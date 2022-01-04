@@ -1,0 +1,5 @@
+build:
+  docker:
+      worker: /plugins/cyberbot/Dockerfile
+run:
+   worker: npm start
