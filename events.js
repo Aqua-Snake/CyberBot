@@ -7,12 +7,12 @@ CyberBot - Aqua Snake
 */
 
 
-// Komutları burada tutacağız.
+// We will keep the commands here.
 var config = require('./config');
 var Commands = [];
 
 function addCommand(info, func) {
-    // Basit bir fonksiyon, komut eklemek için.
+    // A simple function to add commands.
     var types = ['photo', 'image', 'text', 'message'];
 
     var infos = {

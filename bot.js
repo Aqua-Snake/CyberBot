@@ -12,12 +12,12 @@ const events = require("./events");
 const chalk = require('chalk');
 const Config = require('./config');
 const {WAConnection, MessageOptions, MessageType, Mimetype, Presence} = require('@adiwajshing/baileys');
-const {Message, StringSession, Image, Video} = require('./CyberBot/');
+const {Message, StringSession, Image, Video} = require('./cyberBot/');
 const { DataTypes } = require('sequelize');
 const googleTTS = require('google-translate-tts');
 const { getMessage } = require("./database/greetings");
 const axios = require('axios');
-const Cyber = require('./cyber');
+const Cyber = require('./cbot');
 const got = require('got');
 
 // Sql
@@ -32,15 +32,15 @@ const CyberBotDB = Config.DATABASE.define('CyberBot', {
     }
 });
 
-fs.readdirSync('./plugins/sql/').forEach(plugin => {
+fs.readdirSync('./database/').forEach(plugin => {
     if(path.extname(plugin).toLowerCase() == '.js') {
-        require('./plugins/sql/' + plugin);
+        require('./database/' + plugin);
     }
 });
 
-const plugindb = require('./plugins/sql/plugin');
+const plugindb = require('./database/plugin');
 
-// Yalnızca bir kolaylık. https://stackoverflow.com/questions/4974238/javascript-equivalent-of-pythons-format-function //
+// just a convenience. https://stackoverflow.com/questions/4974238/javascript-equivalent-of-pythons-format-function //
 String.prototype.format = function () {
     var i = 0, args = arguments;
     return this.replace(/{}/g, function () {
@@ -158,18 +158,10 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
        );
         
          if (Config.LANG == 'EN') {
-             await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/image/CyberBot.png"), MessageType.image, { caption: `『 Whitedevil』\n\nHello ${conn.user.name}!\n\n*🆘 General Help For You! 🆘*\n\n🔹 *#alive:* Check if the bot is running.\n\n🔹 *#list:* Shows the complete list of commands.\n\n🔹 *#restart:* It Restarts the bot.\n\n🔹 *#shutdown:* It Shutdown/Turn off the bot.\n\n *⚠ Warning, If you shutdown/turn off, there is no command to turn on the bot So You must got to heroku & turn on the worker. ⚠*.\n\nThank You For Using Whitedevil 💖`});
+             await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/image/CyberBot.png"), MessageType.image, { caption: `『CYBER BOT』\n\nHello ${conn.user.name}!\n\n*🆘 General Help For You! 🆘*\n\n🔹 *#alive:* Check if the bot is running.\n\n🔹 *#list:* Shows the complete list of commands.\n\n🔹 *#restart:* It Restarts the bot.\n\n🔹 *#shutdown:* It Shutdown/Turn off the bot.\n\n *⚠ Warning, If you shutdown/turn off, there is no command to turn on the bot So You must got to heroku & turn on the worker. ⚠*.\n\nThank You For Using CyberBot`});
               await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/audio/bot.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
          
-         } else if (Config.LANG == 'ID') {
-             await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/image/CyberBot.png"), MessageType.image, { caption: `『 Whitedevil 』\n\nHalo ${conn.user.name}!\n\n*🆘 Bantuan umum 🆘*\n\n🔹 *#alive:* Periksa apakah bot sedang berjalan.\n\n🔹 *#list:* Menampilkan daftar lengkap perintah.\n\n🔹 *#restart:* Ini me-restart bot.\n\n🔹 *#shutdown:* Ini Matikan/Matikan bot.\n\n *⚠ Peringatan, Jika Anda mematikan/mematikan, tidak ada perintah untuk menghidupkan bot Jadi Anda harus pergi ke heroku & Nyalakan worker. ⚠*.\n\nTerima Kasih Telah Menggunakan Whitedevil 💖`});
-              await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/audio/bot.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-              
-         } else {
-             await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/image/CyberBot.png"), MessageType.image, { caption: `『 Whitedevil 』\n\n *ഹലോ*  ${conn.user.name}!\n\n*🆘 പൊതുവായ സഹായം 🆘*\n\n🔹 *#alive:* ബോട്ട് പ്രവർത്തിക്കുന്നുണ്ടോയെന്ന് പരിശോധിക്കുന്നു.\n\n🔹 *#list:* കമാൻഡുകളുടെ പൂർണ്ണ ലിസ്റ്റ് കാണിക്കുന്നു.\n\n🔹 *#restart:* ഇത് ബോട്ടിനെ പുനരാരംഭിപ്പിക്കുന്നു.\n\n🔹 *#shutdown:* ഇത് ഷട്ട്ഡൗൺ/ബോട്ട് ഓഫ് ചെയ്യുന്നു.\n\n *⚠ മുന്നറിയിപ്പ്, നിങ്ങൾ ഷട്ട്ഡൗൺ/ഓഫ് ചെയ്യുകയാണെങ്കിൽ, ബോട്ട് ഓണാക്കാൻ ഒരു കമാൻഡും ഇല്ല അതിനാൽ നിങ്ങൾ Heroku ഇല്പോയി worker ഓൺ ചെയ്യണം ⚠*.\n\nWhitedevil ഉപയോഗിച്ചതിന് നന്ദി 💖`});
-             await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/audio/bot.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-              
-              }
+         }
      });
 
 
@@ -248,7 +240,7 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                 await axios.get(pp, {responseType: 'arraybuffer'}).then(async (res) => {
                 
                await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: Cyber.tm_b, caption:  gb.message.replace('{pp}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]}}); });                           
-               await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+               await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
 
                 } else if (gb.message.includes('{gp}')) {
                 let gp
@@ -260,7 +252,7 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                 await axios.get(gp, {responseType: 'arraybuffer'}).then(async (res) => {
                     //created by Raashii
                 await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: Cyber.tm_b, caption:  gb.message.replace('{gp}', '').replace('{gphead}', rashijson.subject).replace('{gpmaker}', rashijson.owner).replace('{gpdesc}', rashijson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} }); });
-             await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+             await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
 
    } else if (gb.message.includes('{gif}')) {
                 //created by afnanplk
@@ -270,13 +262,13 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                    var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
 
                 await conn.sendMessage(msg.key.remoteJid, Buffer.from(plkpinky.data), MessageType.video, {thumbnail: Cyber.tm_b, mimetype: Mimetype.gif, caption: gb.message.replace('{gif}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} });
-                await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+                await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
    } else {
               var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
               
               const tag = '@' + msg.messageStubParameters[0].split('@')[0]
                    await conn.sendMessage(msg.key.remoteJid,gb.message.replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag),MessageType.text,{ contextInfo: {mentionedJid: [msg.messageStubParameters[0]]}});
-                await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+                await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
    
               }
               
@@ -300,7 +292,7 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                 await axios.get(pp, {responseType: 'arraybuffer'}).then(async (res) => {
                     //created by afnanplk
                 await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: Cyber.tm_b, caption:  gb.message.replace('{pp}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} }); });                           
-           await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+           await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
 
 
                 } else if (gb.message.includes('{gp}')) {
@@ -314,7 +306,7 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                 await axios.get(gp, {responseType: 'arraybuffer'}).then(async (res) => {
                     //created by Raashii
                 await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: Cyber.tm_b, caption:  gb.message.replace('{gp}', '').replace('{gphead}', rashijson.subject).replace('{gpmaker}', rashijson.owner).replace('{gpdesc}', rashijson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} }); });
-                   await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+                   await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
 
 
                 } else if (gb.message.includes('{gif}')) {
@@ -323,7 +315,7 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                 var plkpinky = await axios.get(Config.WEL_GIF, { responseType: 'arraybuffer' })
                 var pinkjson = await conn.groupMetadata(msg.key.remoteJid)
                 await conn.sendMessage(msg.key.remoteJid, Buffer.from(plkpinky.data), MessageType.video, {thumbnail: Cyber.tm_b, mimetype: Mimetype.gif, caption: gb.message.replace('{gif}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} });
-            await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+            await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
 
 
                 } else {
@@ -331,7 +323,7 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
               var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
                 var pinkjson = await conn.groupMetadata(msg.key.remoteJid)
                     await conn.sendMessage(msg.key.remoteJid,gb.message.replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag),MessageType.text,{ contextInfo: {mentionedJid: [msg.messageStubParameters[0]]}});
-            await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+            await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./media/audio/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
 
 
                 }
