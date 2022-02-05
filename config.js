@@ -81,7 +81,7 @@ module.exports = {
     OWN1: process.env.OWN1 === undefined ? '94701807103,0' : process.env.OWN1,
     OWN2: process.env.OWN2 === undefined ? '94764746599,0' : process.env.OWN2,
     SEND_READ: process.env.SEND_READ === undefined ? false : convertToBool(process.env.SEND_READ),
-    BRANCH: 'master',
+    BRANCH: 'cyberbot',
     DEVELOPER: 'Aqua Snake',
     AUTHOR: 'Aqua Snake',
     GIT: 'https://github.com/Aqua-Snake/CyberBot.git',
