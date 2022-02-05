@@ -1554,23 +1554,23 @@ CBot.addCommand({pattern: 'unmute ?(.*)', fromMe: true, dontAddCommandList: true
     }
 }));
 
-CBot.addCommand({pattern: 'invite ?(.*)', fromMe: true, dontAddCommandList: true, onlyGroup: true, desc: Lang.INVITE_DESC}, (async (message, match) => {    
+CBot.addCommand({pattern: 'invite ?(.*)', fromMe: true, onlyGroup: true, desc: Lang.INVITE_DESC}, (async (message, match) => {    
     var im = await checkImAdmin(message);
     if (!im) return await message.client.sendMessage(message.jid,Lang.IM_NOT_ADMIN, MessageType.text);
     var invite = await message.client.groupInviteCode(message.jid);
     await message.client.sendMessage(message.jid,Lang.INVITE + ' https://chat.whatsapp.com/' + invite, MessageType.text);
 }));
 
-CBot.addCommand({pattern: 'rename ?(.*)', onlyGroup: true, fromMe: true,desc: RENAME_DESC}, (async (message, match) => {
+CBot.addCommand({pattern: 'rename ?(.*)', onlyGroup: true, fromMe: true, desc: Lang.RENAME_DESC}, (async (message, match) => {
     var im = await checkImAdmin(message);
-    if (!im) return await message.client.sendMessage(message.jid,'i am not admin',MessageType.text);
+    if (!im) return await message.client.sendMessage(message.jid,Lang.IM_NOT_ADMIN,MessageType.text);
     if (match[1] === '') return await message.client.sendMessage(message.jid,'changing',MessageType.text);
     await message.client.groupUpdateSubject(message.jid, match[1]);
     await message.client.sendMessage(message.jid,'group name changed to  ```' + match[1] + '```' ,MessageType.text);
     }
 ));
 
-CBot.addCommand({pattern: 'revoke', fromMe: true, onlyGroup: true, desc: Lang.REVOKE_DESC}, (async (message, match) => {    
+CBot.addCommand({pattern: 'revoke ?(.*)', fromMe: true, onlyGroup: true, desc: Lang.REVOKE_DESC}, (async (message, match) => {    
     var im = await checkImAdmin(message);
     if (!im) return await message.client.sendMessage(message.jid, Lang.IM_NOT_ADMIN, MessageType.text);
     await message.client.revokeInvite(message.jid)
