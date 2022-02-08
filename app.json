@@ -131,8 +131,14 @@
             "description": "Customizable Promote Message! Use => default, to change back.",
             "required": false,
             "value": "default" 
-        }
+        },
 
+
+
+
+
+        
+        }
 
           },
     "addons": [{

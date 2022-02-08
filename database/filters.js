@@ -6,7 +6,7 @@ you may not use this file except in compliance with the License.
 CyberBot - Aqua Snake 
 */
 
-const config = require('../../config');
+const config = require('../config');
 const { DataTypes } = require('sequelize');
 
 const FiltersDB = config.DATABASE.define('filter', {

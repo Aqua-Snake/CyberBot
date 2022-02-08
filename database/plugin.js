@@ -7,7 +7,7 @@ CyberBot - Aqua Snake
 */
 
 
-const config = require('../../config');
+const config = require('../config');
 const { DataTypes } = require('sequelize');
 
 const PluginDB = config.DATABASE.define('Plugin', {
