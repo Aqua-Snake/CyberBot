@@ -12,7 +12,7 @@ const Config = require('../config');
 const {MessageType} = require('@adiwajshing/baileys');
 const got = require('got');
 const fs = require('fs');
-const Db = require('./database/plugin');
+const Db = require('./plugins/sql/plugin');
 
 const Language = require('../language');
 const Lang = Language.getString('_plugin');
