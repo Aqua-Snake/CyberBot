@@ -15,7 +15,7 @@ const {WAConnection, MessageOptions, MessageType, Mimetype, Presence} = require(
 const {Message, StringSession, Image, Video} = require('./cyberbot/');
 const { DataTypes } = require('sequelize');
 const googleTTS = require('google-translate-tts');
-const { getMessage } = require("./database/greetings");
+const { getMessage } = require("./plugins/sql/greetings");
 const axios = require('axios');
 const Cyber = require('./cbot');
 const got = require('got');
@@ -32,13 +32,13 @@ const CyberBotDB = Config.DATABASE.define('CyberBot', {
     }
 });
 
-fs.readdirSync('./database/').forEach(plugin => {
+fs.readdirSync('./plugins/sql/').forEach(plugin => {
     if(path.extname(plugin).toLowerCase() == '.js') {
-        require('./database/' + plugin);
+        require('./plugins/sql/' + plugin);
     }
 });
 
-const plugindb = require('./database/plugin');
+const plugindb = require('./plugins/sql/plugin');
 
 // just a convenience. https://stackoverflow.com/questions/4974238/javascript-equivalent-of-pythons-format-function //
 String.prototype.format = function () {
