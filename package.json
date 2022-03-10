@@ -1,7 +1,7 @@
 {
   "name": "CyberBot",
-  "version": "4.0.2",
-  "description": "CyberBot is the Modified Version of WhatsAsena, Made for whatsapp",
+  "version": "4.0.1",
+  "description": "CyberBot is a modified whatsapp bot. It made for fun.",
   "main": "./CyberBot/bot.js",
   "scripts": {
     "start": "supervisor -s bot.js"
@@ -14,8 +14,8 @@
     "whatsapp",
     "bot",
     "ai",
-    "cyberbot",
-    "WhatsAsena"
+    "CyberBot",
+    "CBot"
   ],
   "author": "Aqua-Snake",
   "developer": "@Aqua-Snake",
@@ -30,6 +30,7 @@
     "textmaker-thiccy": "1.2.1",
     "browser-id3-writer": "^4.4.0",
     "playstore-scraper": "^1.0.0",
+    "acrcloud": "^1.4.0",
     "qrcode": "^1.4.4",
     "axios": "^0.21.1",
     "googlethis": "^1.0.7",

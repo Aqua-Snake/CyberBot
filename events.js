@@ -1,18 +1,17 @@
-/* Copyright (C) 2021 Aqua Snake 
+/* Copyright (C) 2020 Yusuf Usta.
 
 Licensed under the  GPL-3.0 License;
 you may not use this file except in compliance with the License.
 
-CyberBot - Aqua Snake 
+WhatsAsena - Yusuf Usta
 */
 
-
-// We will keep the commands here.
+// Komutları burada tutacağız.
 var config = require('./config');
 var Commands = [];
 
 function addCommand(info, func) {
-    // A simple function to add commands.
+    // Basit bir fonksiyon, komut eklemek için.
     var types = ['photo', 'image', 'text', 'message'];
 
     var infos = {

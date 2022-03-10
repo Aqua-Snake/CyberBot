@@ -17,13 +17,13 @@
 */
 
 function successfullMessage(msg) {
-    return "✅ *CYBER BOT*:  ```" + msg + "```"
+    return "✅ *𝓦𝓗𝓘𝓣𝓔 𝓓𝓔𝓥𝓘𝓛*:  ```" + msg + "```"
 }
 function errorMessage(msg) {
-    return "🛑 *CYBER BOT*:  ```" + msg + "```"
+    return "🛑 *𝓦𝓗𝓘𝓣𝓔 𝓓𝓔𝓥𝓘𝓛*:  ```" + msg + "```"
 }
 function infoMessage(msg) {
-    return "⏺️ *CYBER BOT*:  ```" + msg + "```"
+    return "⏺️ *𝓦𝓗𝓘𝓣𝓔 𝓓𝓔𝓥𝓘𝓛*:  ```" + msg + "```"
 }
 
 
