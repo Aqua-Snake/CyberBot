@@ -14,7 +14,7 @@ const fs = require('fs');
 const Config = require('../config');
 
 
-const White = require('../white');
+const White = require('../CBot');
 
 
 const LOAD_ING = "*RESULT FOUND UPLOADING...* \n\n *🛑SONG IS UNDER MAINTAINCE🛑*"

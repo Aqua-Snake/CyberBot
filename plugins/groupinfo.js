@@ -13,7 +13,7 @@ const axios = require('axios');
 const request = require('request');
 const got = require("got");
 
-const White = require('../white');
+const White = require('../CBot');
 const Config = require('../config');
 
 const Language = require('../language');

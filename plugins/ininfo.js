@@ -2,7 +2,7 @@ const Asena = require('../events');
 const {MessageType, GroupSettingChange, Mimetype, MessageOptions} = require('@adiwajshing/baileys');
 const got = require('got');
 
-const White = require('../white');
+const White = require('../CBot');
 const Config = require('../config');
 const LOAD_ING = "*RESULT FOUND UPLOADING...*"
 

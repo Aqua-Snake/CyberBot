@@ -14,7 +14,7 @@ const parseInt = require('parse-int');
 const chalk = require('chalk');
 const conn = new WAConnection();
 
-const White = require('../white');
+const White = require('../CBot');
 const axios = require('axios');
 
 const Language = require('../language');

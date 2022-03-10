@@ -7,7 +7,7 @@ WhatsAsena - Yusuf Usta
 const Asena = require('../events');
 const {MessageType,Mimetype} = require('@adiwajshing/baileys');
 const translatte = require('translatte');
-const White = require('../white');
+const White = require('../CBot');
 const config = require('../config');
 const LanguageDetect = require('languagedetect');
 const lngDetector = new LanguageDetect();
