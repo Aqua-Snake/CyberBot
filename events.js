@@ -1,10 +1,4 @@
-/* Copyright (C) 2020 Yusuf Usta.
-
-Licensed under the  GPL-3.0 License;
-you may not use this file except in compliance with the License.
-
-WhatsAsena - Yusuf Usta
-*/
+ 
 
 // Komutları burada tutacağız.
 var config = require('./config');
@@ -34,10 +28,10 @@ function addCommand(info, func) {
         infos.on = info['on'];
 
         if (info['pattern'] !== undefined) {
-            infos.pattern = new RegExp((info['handler'] === undefined || info['handler'] === false ? config.HANDLERS : '') + info.pattern, (info['flags'] !== undefined ? info['flags'] : ''));
+            infos.pattern = new RegExp((info['handler'] === undefined || info['handler'] === true ? config.HANDLERS : '') + info.pattern, (info['flags'] !== undefined ? info['flags'] : ''));
         }
     } else {
-        infos.pattern = new RegExp((info['handler'] === undefined || info['handler'] === false ? config.HANDLERS : '') + info.pattern, (info['flags'] !== undefined ? info['flags'] : ''));
+        infos.pattern = new RegExp((info['handler'] === undefined || info['handler'] === true ? config.HANDLERS : '') + info.pattern, (info['flags'] !== undefined ? info['flags'] : ''));
     }
 
     Commands.push(infos);

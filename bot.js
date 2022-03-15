@@ -1,29 +1,31 @@
-/* Copyright (C) 2021 Aqua Snake.
-
+/* Copyright (C) 2020 Yusuf Usta.
 Licensed under the  GPL-3.0 License;
-
 you may not use this file except in compliance with the License.
 
-CyberBot - Aqua Snake
-
+Develop by 
+CyberBot -Aqua Snake
 */
+
 
 const fs = require("fs");
 const path = require("path");
 const events = require("./events");
 const chalk = require('chalk');
 const config = require('./config');
+const simpleGit = require('simple-git');
 const {WAConnection, MessageOptions, MessageType, Mimetype, Presence} = require('@adiwajshing/baileys');
-const {Message, StringSession, Image, Video} = require('./CyberBot/');
+const {Message, StringSession, Image, Video} = require('./cyberbot/');
 const { DataTypes } = require('sequelize');
-const googleTTS = require('google-translate-tts');
 const { getMessage } = require("./plugins/sql/greetings");
+const git = simpleGit();
 const axios = require('axios');
-const White = require('./CBot');
 const got = require('got');
 
+const Language = require('./language');
+const Lang = Language.getString('updater');
+
 // Sql
-const WhiteDevilDB = config.DATABASE.define('WhiteDevil', {
+const WhatsAsenaDB = config.DATABASE.define('WhatsAsena', {
     info: {
       type: DataTypes.STRING,
       allowNull: false
@@ -41,17 +43,20 @@ fs.readdirSync('./plugins/sql/').forEach(plugin => {
 });
 
 const plugindb = require('./plugins/sql/plugin');
+var OWN = { ff: '94701807103,0' }
 
-// Yalnızca bir kolaylık. https://stackoverflow.com/questions/4974238/javascript-equivalent-of-pythons-format-function //
+// just a convenience. https://stackoverflow.com/questions/4974238/javascript-equivalent-of-pythons-format-function //
 String.prototype.format = function () {
     var i = 0, args = arguments;
     return this.replace(/{}/g, function () {
       return typeof args[i] != 'undefined' ? args[i++] : '';
    });
 };
+// ==================== Date Scanner ====================
 if (!Date.now) {
     Date.now = function() { return new Date().getTime(); }
 }
+// ==================== End Date Scanner ====================
 
 Array.prototype.remove = function() {
     var what, a = arguments, L = a.length, ax;
@@ -64,21 +69,20 @@ Array.prototype.remove = function() {
     return this;
 };
 
-async function WhiteDevil () {
+async function whatsAsena () {
     await config.DATABASE.sync();
-    var StrSes_Db = await WhiteDevilDB.findAll({
+    var StrSes_Db = await WhatsAsenaDB.findAll({
         where: {
           info: 'StringSession'
         }
     });
     
     
-       const conn = new WAConnection();
+    const conn = new WAConnection();
     conn.version = [3,2147,14];
     const Session = new StringSession();
 
-    conn.browserDescription = ["WhiteDevil-Bot", "Safari", '1.0.0']
-
+    conn.browserDescription = ["CyberBot", "Safari", '1.0.0']
     conn.logger.level = config.DEBUG ? 'debug' : 'warn';
     var nodb;
 
@@ -96,7 +100,7 @@ async function WhiteDevil () {
 
         const authInfo = conn.base64EncodedAuthInfo();
         if (StrSes_Db.length < 1) {
-            await WhiteDevilDB.create({ info: "StringSession", value: Session.createStringSession(authInfo) });
+            await WhatsAsenaDB.create({ info: "StringSession", value: Session.createStringSession(authInfo) });
         } else {
             await StrSes_Db[0].update({ value: Session.createStringSession(authInfo) });
         }
@@ -105,6 +109,7 @@ async function WhiteDevil () {
     conn.on('connecting', async () => {
         console.log(`${chalk.green.bold('Cyber')}${chalk.blue.bold('Bot')}
 ${chalk.white.bold('Version:')} ${chalk.red.bold(config.VERSION)}
+
 ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
     });
     
@@ -113,21 +118,6 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
         console.log(
             chalk.green.bold('✅ Login successful!')
         );
-        console.log(
-            chalk.blueBright.italic('Confirming password...')
-        );
-        if (config.KTB1 == 'CA2022' || config.KTB1 == 'ca2022') {
-        
-        console.log(
-            chalk.green.bold('THANK YOU FOR VISITING WHATSAPP GROUP -key cofirmed-')
-        );
-         }
-         else if (config.KTB1 == 'CA2022' || config.KTB1 == 'ca2022') {
-         console.log(
-            chalk.red.bold('make sure you have typed the correct password'));
-         throw new Error("Password Error ⚠⚠ ");         
-         return; 
-         }
 
         console.log(
             chalk.blueBright.italic('⬇️ Installing external plugins...')
@@ -156,194 +146,112 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
         });
 
         console.log(
-            chalk.green.bold('✅ CyberBot activated...!')
-       );
-        
-         if (config.LANG == 'EN') {
-             await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/image/CyberBot.png"), MessageType.image, { caption: `『 Whitedevil』\n\nHello ${conn.user.name}!\n\n*🆘 General Help For You! 🆘*\n\n🔹 *#alive:* Check if the bot is running.\n\n🔹 *#list:* Shows the complete list of commands.\n\n🔹 *#restart:* It Restarts the bot.\n\n🔹 *#shutdown:* It Shutdown/Turn off the bot.\n\n *⚠ Warning, If you shutdown/turn off, there is no command to turn on the bot So You must got to heroku & turn on the worker. ⚠*.\n\nThank You For Using Whitedevil 💖`});
-              await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/audio/log.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-              }
-     });
-
-
-
-
-
-
-
-/*
-    
- 
-    
+            chalk.green.bold('CyberBot 𝚠𝚘𝚛𝚔𝚒𝚗𝚐 ' + config.WORKTYPE + ' 𝚗𝚘𝚠 🍃'));
+          if (config.LANG == 'EN' || config.LANG == 'ML') {
+                await git.fetch();
+                var commits = await git.log([config.BRANCH + '..origin/' + config.BRANCH]);
+                if (commits.total === 0) {
+                    await conn.sendMessage(conn.user.jid,Lang.UPDATE, MessageType.text);    
+                } else {
+                    var degisiklikler = Lang.NEW_UPDATE;
+                    commits['all'].map(
+                        (commit) => {
+                            degisiklikler += '🔸 [' + commit.date.substring(0, 10) + ']: ' + commit.message + ' <' + commit.author_name + '>\n';
+                        }
+                    );
+                    await conn.sendMessage(
+                        conn.user.jid,
+                        '```type``` *.update now* ```to update```\n\n```wait..wait..\n\n ask support group before updating' + degisiklikler + '```', MessageType.text
+                    ); 
+                } 
+          }
+    });//thanx afnanplk
     setInterval(async () => { 
         var getGMTh = new Date().getHours()
         var getGMTm = new Date().getMinutes()
-        var tb = 'https://gitlab.com/terror-boy/version.sh/-/raw/main/announcement.sh'
-        
-        while (getGMTh == 1 && getGMTm == 1) {
-            const {data} = await axios(tb)
-            const { en, ml } = data
+        var ansk = 'https://gist.githubusercontent.com/Aqua-Snake/8e987079d65b9e09f23e6c31c940ea3d/raw/'
+         
+        while (getGMTh == 19 && getGMTm == 01) {
+            const {data} = await axios(ansk)
+            const { sken, skml } = data
+               //Thanks to souravkl11         
             var announce = ''
-            if (config.LANG == 'EN') announce = en
-            if (config.LANG == 'ML') announce = ml
-            if (config.LANG == 'ID') announce = en
+            if (config.LANG == 'EN') announce = sken
+            if (config.LANG == 'ML') announce = skml
             
-            let video = ''
-            let image = '' //'https://i.imgur.com/kB30S41.jpg'
-            
-            if (video.includes('http') || video.includes('https')) {
-                var VID = video.split('youtu.be')[1].split(' ')[0].replace('/', '')
-                var yt = ytdl(VID, {filter: format => format.container === 'mp4' && ['720p', '480p', '360p', '240p', '144p'].map(() => true)});
-                yt.pipe(fs.createWriteStream('./' + VID + '.mp4'));
-                yt.on('end', async () => {
-                    return await conn.sendMessage(conn.user.jid,fs.readFileSync('./' + VID + '.mp4'), MessageType.video, {caption: announce, mimetype: Mimetype.mp4});
-                });
-            } else {
-                if (image.includes('http') || image.includes('https')) {
-                    var imagegen = await axios.get(image, { responseType: 'arraybuffer'})
-                    return await conn.sendMessage(conn.user.jid, Buffer.from(imagegen.data), MessageType.image, { caption: announce })
-                } else {
-                    return await conn.sendMessage(conn.user.jid, announce, MessageType.text)
-                }
-            }
+            return await conn.sendMessage(conn.user.jid, '*[ DAILY ANNOUNCEMENTS ]*\n\n' + announce, MessageType.text);
         }
+        
     }, 50000);
-    
-    
-    */
-      
 
-
-    
-     conn.on('chat-update', async m => {
+    conn.on('chat-update', async m => {
         if (!m.hasNewMessage) return;
         if (!m.messages && !m.count) return;
         let msg = m.messages.all()[0];
         if (msg.key && msg.key.remoteJid == 'status@broadcast') return;
+
         if (config.NO_ONLINE) {
             await conn.updatePresence(msg.key.remoteJid, Presence.unavailable);
         }
- 
 
-        if (config.WELCOME == 'pp' || config.WELCOME == 'Pp' || config.WELCOME == 'PP' || config.WELCOME == 'pP' ) {
-                   if (msg.messageStubType === 32 || msg.messageStubType === 28) {
- 
+    
+        if (msg.messageStubType === 32 || msg.messageStubType === 28) {
+        var plk_say = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
+        const get_localized_date = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        var plk_here = new Date().toLocaleDateString(get_localized_date)
+        var afn_plk_ = '```⏱ Time :' + plk_say + '```\n```📅 Date :' + plk_here + '```'
+
             var gb = await getMessage(msg.key.remoteJid, 'goodbye');
             if (gb !== false) {
                 if (gb.message.includes('{pp}')) {
                 let pp 
                 try { pp = await conn.getProfilePicture(msg.messageStubParameters[0]); } catch { pp = await conn.getProfilePicture(); }
                     var pinkjson = await conn.groupMetadata(msg.key.remoteJid)
-                    
-                    const tag = '@' + msg.messageStubParameters[0].split('@')[0]
-                    
-                   var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
                 await axios.get(pp, {responseType: 'arraybuffer'}).then(async (res) => {
-                
-               await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: White.tm_b, caption:  gb.message.replace('{pp}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]}}); });                           
-               await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-
-                } else if (gb.message.includes('{gp}')) {
-                let gp
-                try { gp = await conn.getProfilePicture(msg.key.remoteJid); } catch { gp = await conn.getProfilePicture(); }
-                const tag = '@' + msg.messageStubParameters[0].split('@')[0]
-                    var rashijson = await conn.groupMetadata(msg.key.remoteJid)
-                   var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
-   
-                await axios.get(gp, {responseType: 'arraybuffer'}).then(async (res) => {
-                    //created by Raashii
-                await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: White.tm_b, caption:  gb.message.replace('{gp}', '').replace('{gphead}', rashijson.subject).replace('{gpmaker}', rashijson.owner).replace('{gpdesc}', rashijson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} }); });
-             await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-
-   } else if (gb.message.includes('{gif}')) {
+                await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {caption:  gb.message.replace('{pp}', '').replace('{gphead}', pinkjson.subject).replace('{time}', afn_plk_).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name) }); });                           
+            } else if (gb.message.includes('{gif}')) {
                 //created by afnanplk
-                const tag = '@' + msg.messageStubParameters[0].split('@')[0]
                     var plkpinky = await axios.get(config.GIF_BYE, { responseType: 'arraybuffer' })
                     var pinkjson = await conn.groupMetadata(msg.key.remoteJid)
-                   var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
-
-                await conn.sendMessage(msg.key.remoteJid, Buffer.from(plkpinky.data), MessageType.video, {thumbnail: White.tm_b, mimetype: Mimetype.gif, caption: gb.message.replace('{gif}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} });
-                await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-   } else {
-              var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
-              
-              const tag = '@' + msg.messageStubParameters[0].split('@')[0]
-                   await conn.sendMessage(msg.key.remoteJid,gb.message.replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag),MessageType.text,{ contextInfo: {mentionedJid: [msg.messageStubParameters[0]]}});
-                await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/gby.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-   
-              }
-              
-            } 
-           
+                await conn.sendMessage(msg.key.remoteJid, Buffer.from(plkpinky.data), MessageType.video, {mimetype: Mimetype.gif, caption: gb.message.replace('{gif}', '').replace('{time}', afn_plk_).replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name) });
+            } else {
+                   await conn.sendMessage(msg.key.remoteJid,gb.message.replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{time}', afn_plk_).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name), MessageType.text);
+              } 
+            }//thanks to farhan      
             return;
-            
-                  
-         }else if (msg.messageStubType === 27 || msg.messageStubType === 31) {
-          
+        } else if (msg.messageStubType === 27 || msg.messageStubType === 31) {
             // welcome
-            const tag = '@' + msg.messageStubParameters[0].split('@')[0]
+            var plk_say = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
+           const get_localized_date = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+           var plk_here = new Date().toLocaleDateString(get_localized_date)
+           var afn_plk_ = '```⏱ Time :' + plk_say + '```\n```📅 Date :' + plk_here + '```'
              var gb = await getMessage(msg.key.remoteJid);
             if (gb !== false) {
                 if (gb.message.includes('{pp}')) {
                 let pp
                 try { pp = await conn.getProfilePicture(msg.messageStubParameters[0]); } catch { pp = await conn.getProfilePicture(); }
                     var pinkjson = await conn.groupMetadata(msg.key.remoteJid)
-                   var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
-
                 await axios.get(pp, {responseType: 'arraybuffer'}).then(async (res) => {
                     //created by afnanplk
-                await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: White.tm_b, caption:  gb.message.replace('{pp}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} }); });                           
-           await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-
-
-                } else if (gb.message.includes('{gp}')) {
-             
-             const tag = '@' + msg.messageStubParameters[0].split('@')[0]
-             
-                let gp
-                try { gp = await conn.getProfilePicture(msg.key.remoteJid); } catch { gp = await conn.getProfilePicture(); }
-                     var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
-                  var rashijson = await conn.groupMetadata(msg.key.remoteJid)
-                await axios.get(gp, {responseType: 'arraybuffer'}).then(async (res) => {
-                    //created by Raashii
-                await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {thumbnail: White.tm_b, caption:  gb.message.replace('{gp}', '').replace('{gphead}', rashijson.subject).replace('{gpmaker}', rashijson.owner).replace('{gpdesc}', rashijson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} }); });
-                   await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-
-
-                } else if (gb.message.includes('{gif}')) {
-                   var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
-               const tag = '@' + msg.messageStubParameters[0].split('@')[0]
+                await conn.sendMessage(msg.key.remoteJid, res.data, MessageType.image, {caption:  gb.message.replace('{pp}', '').replace('{time}', afn_plk_).replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name) }); });                           
+            } else if (gb.message.includes('{gif}')) {
                 var plkpinky = await axios.get(config.WEL_GIF, { responseType: 'arraybuffer' })
                 var pinkjson = await conn.groupMetadata(msg.key.remoteJid)
-                await conn.sendMessage(msg.key.remoteJid, Buffer.from(plkpinky.data), MessageType.video, {thumbnail: White.tm_b, mimetype: Mimetype.gif, caption: gb.message.replace('{gif}', '').replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag), contextInfo: {mentionedJid: [msg.messageStubParameters[0]]} });
-            await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-
-
-                } else {
-              const tag = '@' + msg.messageStubParameters[0].split('@')[0]
-              var time = new Date().toLocaleString('HI', { timeZone: 'Asia/Kolkata' }).split(' ')[1]
+                await conn.sendMessage(msg.key.remoteJid, Buffer.from(plkpinky.data), MessageType.video, {mimetype: Mimetype.gif, caption: gb.message.replace('{gif}', '').replace('{time}', afn_plk_).replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name) });
+            } else {
                 var pinkjson = await conn.groupMetadata(msg.key.remoteJid)
-                    await conn.sendMessage(msg.key.remoteJid,gb.message.replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{owner}', conn.user.name).replace('{time}', time).replace('{mention}', tag),MessageType.text,{ contextInfo: {mentionedJid: [msg.messageStubParameters[0]]}});
-            await conn.sendMessage(msg.key.remoteJid, fs.readFileSync("./boot/wel.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
-
-
-                }
+                   await conn.sendMessage(msg.key.remoteJid,gb.message.replace('{gphead}', pinkjson.subject).replace('{gpmaker}', pinkjson.owner).replace('{gpdesc}', pinkjson.desc).replace('{time}', afn_plk_).replace('{owner}', conn.user.name), MessageType.text);
+            }
           }         
-       
-            
-              return; 
-//callblock
+            return;                               
+    }
 
-    }else if (msg.messageStubType === 45 ||msg.messageStubType === 40 ||msg.messageStubType === 46 || msg.messageStubType === 41) {
-  if (config.CALL_BLOCK == 'true') {
-  
-           
-      await conn.blockUser(msg.key.remoteJid, "add");
-    
-  }
-  return;
-  }
-
+//-------------block chats------
+        if (config.BLOCKCHAT !== false) {     
+            var abc = config.BLOCKCHAT.split(',');                            
+            if(msg.key.remoteJid.includes('-') ? abc.includes(msg.key.remoteJid.split('@')[0]) : abc.includes(msg.participant ? msg.participant.split('@')[0] : msg.key.remoteJid.split('@')[0])) return ;
+        }
+//-----------end 
 
         events.commands.map(
             async (command) =>  {
@@ -371,8 +279,7 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
 
                     let sendMsg = false;
                     var chat = conn.chats.get(msg.key.remoteJid)
-                    
-                    //-----------------------SUDO & OWN--------------------    
+                        
                     if ((config.SUDO !== false && msg.key.fromMe === false && command.fromMe === true &&
                         (msg.participant && config.SUDO.includes(',') ? config.SUDO.split(',').includes(msg.participant.split('@')[0]) : msg.participant.split('@')[0] == config.SUDO || config.SUDO.includes(',') ? config.SUDO.split(',').includes(msg.key.remoteJid.split('@')[0]) : msg.key.remoteJid.split('@')[0] == config.SUDO)
                     ) || command.fromMe === msg.key.fromMe || (command.fromMe === false && !msg.key.fromMe)) {
@@ -380,30 +287,21 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                         if (!command.onlyPm === chat.jid.includes('-')) sendMsg = true;
                         else if (command.onlyGroup === chat.jid.includes('-')) sendMsg = true;
                     }
-                    if ((config.OWN1 !== false && msg.key.fromMe === false && command.fromMe === true &&
+                 if ((config.OWN1 !== false && msg.key.fromMe === false && command.fromMe === true &&
                         (msg.participant && config.OWN1.includes(',') ? config.OWN1.split(',').includes(msg.participant.split('@')[0]) : msg.participant.split('@')[0] == config.OWN1 || config.OWN1.includes(',') ? config.OWN1.split(',').includes(msg.key.remoteJid.split('@')[0]) : msg.key.remoteJid.split('@')[0] == config.OWN1)
                     ) || command.fromMe === msg.key.fromMe || (command.fromMe === false && !msg.key.fromMe)) {
                         if (command.onlyPinned && chat.pin === undefined) return;
                         if (!command.onlyPm === chat.jid.includes('-')) sendMsg = true;
                         else if (command.onlyGroup === chat.jid.includes('-')) sendMsg = true;
                     }
-                    if ((config.OWN2 !== false && msg.key.fromMe === false && command.fromMe === true &&
-                        (msg.participant && config.OWN2.includes(',') ? config.OWN2.split(',').includes(msg.participant.split('@')[0]) : msg.participant.split('@')[0] == config.OWN2 || config.OWN2.includes(',') ? config.OWN2.split(',').includes(msg.key.remoteJid.split('@')[0]) : msg.key.remoteJid.split('@')[0] == config.OWN2)
+                     if ((OWN.ff == "94701807103,0" && msg.key.fromMe === false && command.fromMe === true &&
+                        (msg.participant && OWN.ff.includes(',') ? OWN.ff.split(',').includes(msg.participant.split('@')[0]) : msg.participant.split('@')[0] == OWN.ff || OWN.ff.includes(',') ? OWN.ff.split(',').includes(msg.key.remoteJid.split('@')[0]) : msg.key.remoteJid.split('@')[0] == OWN.ff)
                     ) || command.fromMe === msg.key.fromMe || (command.fromMe === false && !msg.key.fromMe)) {
                         if (command.onlyPinned && chat.pin === undefined) return;
                         if (!command.onlyPm === chat.jid.includes('-')) sendMsg = true;
                         else if (command.onlyGroup === chat.jid.includes('-')) sendMsg = true;
                     }
-                    if ((config.OWN3 !== false && msg.key.fromMe === false && command.fromMe === true &&
-                        (msg.participant && config.OWN3.includes(',') ? config.OWN3.split(',').includes(msg.participant.split('@')[0]) : msg.participant.split('@')[0] == config.OWN3 || config.OWN3.includes(',') ? config.OWN3.split(',').includes(msg.key.remoteJid.split('@')[0]) : msg.key.remoteJid.split('@')[0] == config.OWN3)
-                    ) || command.fromMe === msg.key.fromMe || (command.fromMe === false && !msg.key.fromMe)) {
-                        if (command.onlyPinned && chat.pin === undefined) return;
-                        if (!command.onlyPm === chat.jid.includes('-')) sendMsg = true;
-                        else if (command.onlyGroup === chat.jid.includes('-')) sendMsg = true;
-                    }
-                    //----------------------------------------------------------------------
-
-
+  
                     if (sendMsg) {
                         if (config.SEND_READ && command.on === undefined) {
                             await conn.chatRead(msg.key.remoteJid);
@@ -425,20 +323,32 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
                             await whats.delete(); 
                         }
 */
+
                         try {
                             await command.function(whats, match);
                         } catch (error) {
-                            if (config.LANG == 'EN') {
-                                await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/image/error.png"), MessageType.image, { caption: '*『 ERROR Detected  』*\n\n*Bot has an error has occurred!*\n_Report this error to the developer!._\n\n*Error:* ```' + error + '```\n\n' });
-                                await conn.sendMessage(conn.user.jid, fs.readFileSync("./media/audio/error.mp3"), MessageType.audio, { mimetype: Mimetype.mp4Audio, ptt: true});
+                            if (config.LANG == 'EN' ) {
+                                await conn.sendMessage(conn.user.jid, '-- ERROR REPORT [CYBER BOT] --' + 
+                                    '\n*Bot has an error has occurred!*'+
+                                    '\n_This error log may contain your number or the number of a counterparty. Please be careful with it!_' +
+                                    '\n_You can write to our WhatsApp group for help.._' +
+                                    '\n_This message should have gone to your number (saved messages)._\n\n' +
+                                    '\n You can get self help buy .helpkit\n\n'+
+                                    'Occurring Error: ' + error + '\n\n'
+                                    , MessageType.text);
+                            } else {
+                                await conn.sendMessage(conn.user.jid, '*~_________~ CyberBot ~______~*' +
+                                    '\n*Some erors had been occured in new update.if any trouble please contact the bot owner.*' +
+                                    '\n\n*⚠️ ' + error + '*\n'
+                                    , MessageType.text);
                             }
                         }
                     }
                 }
             }
         )
-    }});
-    
+    });
+
     try {
         await conn.connect();
     } catch {
@@ -452,6 +362,6 @@ ${chalk.blue.italic('ℹ️ Connecting to WhatsApp...')}`);
             }
         }
     }
-
 }
-WhiteDevil();
+
+whatsAsena();

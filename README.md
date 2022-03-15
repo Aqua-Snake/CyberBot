@@ -1,14 +1,15 @@
-# CyberBot
-A WhatsApp User Bot
+# cyberbot-v3
+Button update
 
+## Visit to Our Offcial Website [Cyber Bot Web](https://aqua-snake.github.io/cyberbot/)
 
 
 
 ### Simple Method
 
-[![Run on Repl.it](https://repl.it/badge/github/Aqua-Snake/CyberBot)](https://replit.com/@aquasnake/CBot-QR)
+[![Run on Repl.it](https://repl.it/badge/github/phaticusthiccy/WhatsAsenaDuplicated)](https://replit.com/@aquasnake/Bot-QR)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Aqua-Snake/CyberBot)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Aqua-Snake/cyberbot-v3)
 
 
 ### ⚠️ Warning! 
