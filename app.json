@@ -61,6 +61,10 @@
             "required": true,
             "value": "false"
         },
+        "BOT_PASSWORD": {
+            "description": "without this password you can't use this bot",
+            "required": true,  
+        },
         "GROUP_LINK": {
             "description": "Enter your bot group link.",
             "required": false,
