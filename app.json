@@ -1,10 +1,10 @@
 {
-    "name": "CyberBot-v3",
+    "name": "CyberBot",
     "description": "CyberBot-v3 is the Modified Version of CyberBot.New Experiense.",
     "logo": "https://i.ibb.co/h26VWqL/CyberBot.jpg",
     "keywords": ["whatsapp", "userbot", "CyberBot", "CBOt", "cyber", "bot", "ai"],
-    "repository": "https://github.com/Aqua-Snake/cyberbot-v3",
-    "website":   "https://aqua-snake.github.io/cyberbot",
+    "repository": "https://github.com/Aqua-Snake/Cyberbot",
+    "website":   "https://aqua-snake.github.io/Cyberbot",
     "success_url": "https://github.com/Aqua-Snake",
     "stack": "container",
     "env": {
